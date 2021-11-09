@@ -1,5 +1,4 @@
-import aesjs from "aes-js"
-import { getJson, URL_API } from "./API"
+import { getJson } from "./API"
 
 var infoServer = undefined
 
@@ -17,10 +16,10 @@ function updateInfoServer() {
 function getPublicKey() {
     return new Promise((resolve, reject) => {
         if (infoServer) {
-            resolve(infoServer.publicKey)
+            resolve(infoServer.public_key)
         } else {
             updateInfoServer()
-                .then(() => resolve(infoServer.publicKey))
+                .then(() => resolve(infoServer.public_key))
                 .catch((err) => reject(err))
         }
     })
@@ -30,4 +29,4 @@ function getServerStatus() {
    return updateInfoServer()
 }
 
-export { getPublicKey as getPrivKey, getServerStatus }
+export { getPublicKey, getServerStatus }
