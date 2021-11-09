@@ -1,38 +1,33 @@
-import { useEffect, useState } from "react";
-import { generateNewAes } from "../utils/cryptographic";
-import { getPublicKey } from "../utils/status_server";
-import aesjs from "aes-js";
-import { encrypt } from "eciesjs";
+import { useEffect, useState } from "react"
+import { generateNewAes } from "../utils/cryptographic"
+import { getPublicKey } from "../utils/status_server"
+import aesjs from "aes-js"
+import { encrypt } from "eciesjs"
+import { getJson } from "../utils/API"
 
 export function EncryptionDemo(props) {
-   const [publicKey, setPublicKey] = useState("");
-   const [aesKey, setAesKey] = useState("");
-   const [ivKey, setIvKey] = useState("");
-   const [message, setMessage] = useState("");
-   const [pkeyMessage, setPkeyMessage] = useState("");
+    const [publicKey, setPublicKey] = useState("")
+    const [privateKey, setPrivateKey] = useState("")
 
-   useEffect(() => {
-      getPublicKey().then((pkey) => {
-         setPublicKey(pkey);
-         let [aes, key, iv] = generateNewAes();
+    useEffect(() => {
+        getPublicKey().then((pkey) => {
+            setPublicKey(pkey)
 
-         let pkeyEncrypted = encrypt(pkey, key.concat(iv));
+            let [aes, key, iv] = generateNewAes()
+            let pkeyEncrypted = aesjs.utils.hex.fromBytes(encrypt(pkey, key.concat(iv)))
 
-         setAesKey(aesjs.utils.hex.fromBytes(key));
-         setIvKey(aesjs.utils.hex.fromBytes(iv));
+            getJson(`/getPrivateKey/yeferson/${pkeyEncrypted}`).then((data) => {
+                let message = aes.decrypt(aesjs.utils.hex.toBytes(data.private_key)).slice(0, 32)
+                let messageDecrypted = aesjs.utils.hex.fromBytes(message)
+                setPrivateKey(messageDecrypted)
+            })
+        })
+    }, [])
 
-         setPkeyMessage(aesjs.utils.hex.fromBytes(pkeyEncrypted));
-         setMessage(aesjs.utils.hex.fromBytes(key.concat(iv)));
-      });
-   }, []);
-
-   return (
-      <>
-         <div>Server Public Key: {publicKey}</div>
-         <div>AES Key: {aesKey}</div>
-         <div>IV Key: {ivKey}</div>
-         <div>Message: {message}</div>
-         <div>Message Encrypted: {pkeyMessage}</div>
-      </>
-   );
+    return (
+        <>
+            <div>Server Public Key: {publicKey}</div>
+            <div>Message Decrypted: {privateKey}</div>
+        </>
+    )
 }
