@@ -1,16 +1,13 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import { getServerStatus } from "./utils/status_server";
 
 import { EncryptionDemo } from "./pages/encryptiondemo";
+import { updateInfoServer } from "./utils/status_server"
 
 function App() {
    const [serverOnline, setServerOnline] = useState("loading");
 
    useEffect(() => {
-      getServerStatus()
-         .then(() => setServerOnline("online"))
-         .catch(() => setServerOnline("offline"));
    }, []);
 
    return (

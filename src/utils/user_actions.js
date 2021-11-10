@@ -3,7 +3,7 @@ var userVars = {
     public_key: undefined,
 }
 
-function cantainsPrivateKey() {
+export function containsPrivateKey() {
     if (userVars.private_key === undefined) {
         return false;
     }
@@ -11,12 +11,7 @@ function cantainsPrivateKey() {
     return true;
 }
 
-function setUserVars(private_key) {
+export function setUserVars(private_key) {
     userVars.private_key = private_key;
     // userVars.public_key = public_key;
-}
-
-export {
-    cantainsPrivateKey,
-    setUserVars,
 }

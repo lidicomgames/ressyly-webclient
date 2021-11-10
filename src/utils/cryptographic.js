@@ -13,5 +13,5 @@ function randomKey() {
 export function generateNewAes() {
    let key = randomKey();
    let iv = randomKey();
-   return [new aesjs.ModeOfOperation.cbc(key, iv), key, iv];
+   return { aes: new aesjs.ModeOfOperation.cbc(key, iv), key, iv };
 }
