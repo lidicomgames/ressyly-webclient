@@ -3,10 +3,13 @@ import ReactDOM from "react-dom"
 import "./index.css"
 import App from "./App"
 import reportWebVitals from "./reportWebVitals"
+import { StatusServer } from "./utils/status_server"
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <StatusServer>
+            <App />
+        </StatusServer>
     </React.StrictMode>,
     document.getElementById("root")
 )

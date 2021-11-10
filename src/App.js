@@ -1,27 +1,23 @@
-import "./App.css";
-import { useState, useEffect } from "react";
+import "./App.css"
 
-import { EncryptionDemo } from "./pages/encryptiondemo";
-import { updateInfoServer } from "./utils/status_server"
+import { EncryptionDemo } from "./pages/encryptiondemo"
+import { useStatusServer } from "./utils/status_server"
 
 function App() {
-   const [serverOnline, setServerOnline] = useState("loading");
+    const serverStatus = useStatusServer()
 
-   useEffect(() => {
-   }, []);
+    return (
+        <>
+            <div>{serverStatus.status}</div>
+            <br />
 
-   return (
-      <>
-         <div>{serverOnline}</div>
-         <br />
-
-         {serverOnline === "online" && (
-            <div>
-               <EncryptionDemo />
-            </div>
-         )}
-      </>
-   );
+            {serverStatus.status === "online" && (
+                <div>
+                    <EncryptionDemo />
+                </div>
+            )}
+        </>
+    )
 }
 
-export default App;
+export default App
